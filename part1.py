@@ -5,7 +5,7 @@ from pyspark.sql import SQLContext
 
 import datetime as dt
 
-conf = SparkConf().setAppName("testing").setMaster("local[4]")
+conf = SparkConf().setAppName("testing").setMaster("local[2]")
 sc = SparkContext(conf=conf)
 sqlContext = SQLContext(sc)
 
@@ -28,6 +28,7 @@ def calculate_key_value_1(line):
 
 
 ndata = data.map(calculate_key_value_1)
+ndata.repartition(50)
 
 ndata = (
     ndata.mapValues(lambda x: (x, 1))
@@ -35,14 +36,11 @@ ndata = (
     .mapValues(lambda x: x[0] / x[1])
 )
 
-#  header = [("HourOfDay", "AverageTripDuration")]
-#  header = sc.parallelize(header)
-#  df = sqlContext.createDataFrame(ndata, ["HourOfDay", "AverageTripDuration"])
-ndata = sc.parallelize(ndata.collect())
 df = ndata.toDF(["HourOfDay", "AverageTripDuration"])
-df.coalesce(1).write.format("com.databricks.spark.csv").options(
-    header="true"
-).save("hdfs:///Project/part1.csv")
+df.coalesce(1).write.csv("/Project/TripDuration", mode="overwrite", header="true")
+
+ndata.unpersist()
+df.unpersist()
 
 # --------------------------------- Part 1b ---------------------------------- #
 
@@ -60,10 +58,18 @@ tdata = sqlContext.createDataFrame(tdata, ["id", "price"])
 
 alldata = tvendors.join(tdata, on="id", how="inner")
 
+tvendors.unpersist()
+tdata.unpersist()
+
 alldata = alldata.rdd
+alldata.repartition(50)
 
 alldata = alldata.map(lambda x: (x["company"], float(x["price"]))).reduceByKey(
     max
 )
 
-print(alldata.take(10))
+df = alldata.toDF(["VendorID", "MaxAmount"])
+df.coalesce(1).write.csv("/Project/MaxAmount", mode="overwrite", header="true")
+
+alldata.unpersist()
+df.unpersist()
