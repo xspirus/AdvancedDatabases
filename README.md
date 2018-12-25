@@ -14,8 +14,10 @@ Project solution using `Spark`, `Hadoop` and `Python`.
 ##### Master
 ```shell
 cd /home/user/Project
-START-HDFS-SPARK
+start-hdfs-spark
 pyspark # opens notebook
+# When done with spark do
+stop-hdfs-spark
 ```
 
 ##### Spark Cluster
