@@ -5,6 +5,7 @@
 *.aux
 *.log
 *.toc
+*.synctex.gz
 
 # -------------------------- Files with underscore --------------------------- #
 
