@@ -1,10 +1,11 @@
 \ProvidesClass{ntua}[2018/10/27 NTUA report class]
 
-\LoadClass[12pt]{article}
+\LoadClass[12pt,a4paper]{article}
 % greek language
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage[greek,english]{babel}
+\RequirePackage[document]{ragged2e}
 \RequirePackage{alphabeta}
 
 % margins
@@ -12,6 +13,9 @@
 
 % \thetitle \theauthor \thedate
 \RequirePackage{titling}
+
+% no paragraph indent
+\RequirePackage{parskip}
 
 % section manipulation
 \RequirePackage{titlesec}
@@ -22,6 +26,7 @@
 
 % graphics
 \RequirePackage{graphicx}
+\RequirePackage{subfig}
 
 % float objects manipulation (adds H option)
 \RequirePackage{float}
@@ -32,6 +37,13 @@
 
 % programming languages
 \RequirePackage{minted}
+
+% make graphics
+\RequirePackage{tikz}
+\RequirePackage{pgf}
+\RequirePackage{adjustbox}
+
+\usetikzlibrary{automata,positioning,fit,matrix}
 
 \colorlet{darkcyan}{blue!60!black}
 
@@ -48,13 +60,23 @@
 }
 
 \titleformat{\section}[hang]
-	{\Large\bfseries\scshape\raggedright}
+	{\Large\bfseries\raggedright}
 	{\thesection}{.5em}{$|$\hspace{.5em}}
 	
 \titleformat{\subsection}[hang]
-	{\large\bfseries\scshape\raggedright}
+	{\large\bfseries\raggedright}
 	{\thesubsection}{.5em}{$|$\hspace{.5em}}
 	
 \titleformat{\subsubsection}[hang]
-	{\normalsize\bfseries\scshape\raggedright}
+	{\normalsize\bfseries\raggedright}
 	{\thesubsubsection}{.5em}{$|$\hspace{.5em}}
+	
+\setminted{
+	breaklines=true,
+	fontsize=\footnotesize,
+	frame=single,
+	framesep=5pt,
+	numbers=left,
+	numbersep=5pt,
+	tabsize=4
+}
