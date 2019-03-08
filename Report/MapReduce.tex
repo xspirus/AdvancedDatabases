@@ -395,7 +395,7 @@ H άσκηση ζητάει να υπολογιστεί το γινόμενο δ
 	\State $B.sort(key=lambda\ x:\ x[0])$
 	\State $sum \gets 0$
 	\For{$i \gets 0, len(A)$}
-		\State $sum \gets sum + A[i] * B[i]$
+		\State $sum \gets sum + A[i][1] * B[i][1]$
 	\EndFor
 	\Emit $(key, sum)$
 	\EndFunction
@@ -422,5 +422,13 @@ H άσκηση ζητάει να υπολογιστεί το γινόμενο δ
 \begin{center}
 \url{http://83.212.73.250:50070}
 \end{center}
+Πιο συγκεκριμένα, τα αποτελέσματα των ερωτημάτων βρίσκονται με τη σειρά:
+\begin{itemize}
+	\item \href{http://83.212.73.250:50070/explorer.html\#/Project/TripDuration}{Διάρκεια Ταξιδιού ανά Ώρα}
+	\item \href{http://83.212.73.250:50070/explorer.html\#/Project/MaxAmountPaid}{Μέγιστο Ποσό Πληρωμής ανά Εταιρεία}
+	\item \href{http://83.212.73.250:50070/explorer.html#/Project/Centroids}{K-means}
+	\item \href{http://83.212.73.250:50070/explorer.html#/Project/PageRank}{Page Rank}
+	\item \href{http://83.212.73.250:50070/explorer.html#/Project/Matrix}{Matrix Multiplication}
+\end{itemize}
 
 \end{document}
