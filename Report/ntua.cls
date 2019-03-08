@@ -38,6 +38,14 @@
 % programming languages
 \RequirePackage{minted}
 
+% links
+\RequirePackage[colorlinks=true, urlcolor=blue]{hyperref}
+
+% algorithms
+\RequirePackage{algorithm}
+\RequirePackage{algpseudocode}
+\RequirePackage{algorithmicx}
+
 % make graphics
 \RequirePackage{tikz}
 \RequirePackage{pgf}

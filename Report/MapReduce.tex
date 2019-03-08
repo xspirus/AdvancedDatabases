@@ -14,6 +14,9 @@
 \fancyfoot{}
 \fancyfoot[C]{Σελίδα \thepage}
 
+\algnewcommand\algorithmicemit{\textbf{emit}}
+\algnewcommand\Emit{\State\algorithmicemit\ }
+
 \usepackage{titlesec}
 
 \begin{document}
@@ -56,23 +59,116 @@
 \subsubsection{Ερώτημα Α}
 Το πρώτο ερώτημα ζητά να βρεθεί η μέση διάρκεια διαδρομής (σε λεπτά) ανά ώρα έναρξης της διαδρομής και να 
 ταξινομιθεί το αποτέλεσμα με βάση την ώρα έναρξης σε αύξουσα σειρά. Για την επίλυση του ερωτήματος, διαβάζουμε τα δεδομένα απο τό αρχείο yellow\_tripdata\_1m.csv και χρησιμοποιούμε μία φάση \textbf{MapReduceMap}, όπως αναφέρεται και στη σχετική υπόδειξη.\\ \\ 
-Στη φάση \textbf{Map}, για κάθε εγγραφή του αρχείου υπολογίζουμε τη χρονική διάρκεια κάθε διαδρομής σε λεπτά χρησιμοποιόντας την ημερομηνία και ώρα έναρξης και λήξης της και κάνουμε emit tuples της μορφής $( key = start\_hour, value = duration)$. \\ \\
+Στη φάση \textbf{Map}, για κάθε εγγραφή του αρχείου υπολογίζουμε τη χρονική διάρκεια κάθε διαδρομής σε λεπτά χρησιμοποιόντας την ημερομηνία και ώρα έναρξης και λήξης της και κάνουμε emit tuples της μορφής \emph{(key = start\_hour, value = duration)}. \\ \\
 Στη φάση \textbf{Reduce}, υπολογίζουμε το συνολικό άθροισμα των διαδρομών ανά ώρα έναρξης και 
-και για κάθε ώρα έναρξης κάνουμε emit tuples της μορφής $( key = start\_hour, value = (total\_trips,duration))$.\\ \\ 
-Στη φάση \textbf{Map}, για κάθε tuple υπολογίζουμε τη μέση διάρκεια διαδρομής ανά ώρα έναρξης και κάνουμε emit tuples της μορφής $( key = start\_hour, value = avg\_duration)$. Τα δεδομένα μας είναι στη μορφή που επιθυμούμε.  \\ \\
+και για κάθε ώρα έναρξης κάνουμε emit tuples της μορφής \emph{(key = start\_hour, value = (total\_trips,duration))}.\\ \\ 
+Στη φάση \textbf{Map}, για κάθε tuple υπολογίζουμε τη μέση διάρκεια διαδρομής ανά ώρα έναρξης και κάνουμε emit tuples της μορφής \emph{(key = start\_hour, value = avg\_duration)}. Τα δεδομένα μας είναι στη μορφή που επιθυμούμε.  \\ \\
 Τέλος, ταξινομούμε τα αποτελέσματα με βάση την ώρα έναρξης της διαδρομής και τα γράφουμε σε αρχείο και τα εμφανίζουμε.
 \subsubsection{Ερώτημα Β}
 Το πρώτο ερώτημα ζητά να βρεθεί το μέγιστο ποσό που πληρώθηκε σε μία διαδρομή σε κάθε εταιρία ταξί. Για την επίλυση του ερωτήματος, διαβάζουμε τα δεδομένα από τα αρχεία yellow\_tripdata\_1m.csv και yellow\_tripvendors\_1m.csv. Χρησιμοποιούμε μία φάση \textbf{MapJoin} και έπειτα άλλη μία \textbf{MapReduce}. \\ \\ 
-Στη φάση \textbf{Map}, για κάθε εγγραφή του yellow\_tripdata\_1m.csv κάνουμε emit tuples της μορφής $( key = trip\_id, value = company\_id)$, ενώ για κάθε εγγραφή του yellow\_tripvendors\_1m.csv κάνουμε emit tuples της μορφής $( key = trip\_id, value = amount)$. \\ \\
+Στη φάση \textbf{Map}, για κάθε εγγραφή του yellow\_tripdata\_1m.csv κάνουμε emit tuples της μορφής \emph{(key = trip\_id, value = company\_id)}, ενώ για κάθε εγγραφή του yellow\_tripvendors\_1m.csv κάνουμε emit tuples της μορφής \emph{(key = trip\_id, value = amount)}. \\ \\
 Στη συνέχεια, πραγματοποιούμε inner join με βάση το $trip\_id$ μεταξύ των δύο παραπάνω $RDDs$.\\ \\ 
-Στη φάση \textbf{Map}, για κάθε tuple της μορφής$( key = trip\_id, value = (company\_id,amount))$ κάνουμε emit tuples της μορφής $( key = company\_id, value = amount)$.  \\ \\
-Στη φάση \textbf{Reduce}, βρίσκουμε το μέγιστο ποσό ανά εταιρία και κάνουμε emit tuples της μορφής $( key = company\_id, value = max\_amount)$. \\ \\
+Στη φάση \textbf{Map}, για κάθε tuple της μορφής \emph{(key = trip\_id, value = (company\_id,amount))} κάνουμε emit tuples της μορφής \emph{(key = company\_id, value = amount)}.\\ \\
+Στη φάση \textbf{Reduce}, βρίσκουμε το μέγιστο ποσό ανά εταιρία και κάνουμε emit tuples της μορφής \emph{(key = company\_id, value = max\_amount)}. \\ \\
 Τέλος, ταξινομούμε τα αποτελέσματα με βάση το key = $company\_id$, τα γράφουμε σε αρχείο και τα εμφανίζουμε.
+
 \subsection{Ψευδοκώδικας}
 
 \subsubsection{Ερώτημα Α}
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Input}}
+\begin{algorithmic}[1]
+\Function{map}{$key, value$}
+	\Comment{key is some id, value is the line of the csv file}
+	\State $line\gets value.split(",")$
+	\State $start\gets line[1]$
+	\State $end\gets line[2]$
+	\State $start\gets start.format("\%Y-\%m-\%d\ \%H:\%M:\%S")$
+	\State $end\gets end.format("\%Y-\%m-\%d\ \%H:\%M:\%S")$
+	\Emit $(start.hour, diff\_in\_minutes(end - start))$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce Mapped Input}}
+\begin{algorithmic}[1]
+	\Function{reduce}{$key, values$}
+	\Comment{key is some start hour, value is list of durations}
+	\State $sum\gets 0$
+	\For{$dur$ \textbf{in} $values$}
+		\State $sum \gets sum + dur$
+	\EndFor
+	\State $average \gets sum / len(values)$
+	\Emit $(key, average)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Ερώτημα Β}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Vendors}}
+\begin{algorithmic}[1]
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is csv line}
+	\State $line \gets value.split(",")$
+	\State $id \gets line[0]$
+	\State $vendor \gets line[1]$
+	\Emit $(id, ("vendor", vendor))$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Trips}}
+\begin{algorithmic}[1]
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is csv line}
+	\State $line \gets value.split(",")$
+	\State $id \gets line[0]$
+	\State $payment \gets line[7]$
+	\Emit $(id, ("pay", payment))$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Join Mapped Inputs through Reduce}}
+\begin{algorithmic}[1]
+	\Function{reduce}{$key, values$}
+	\Comment{key is trip id, value is list of one vendor id and one payment}
+	\State $vendor \gets find\_assoc(values, "vendor")$
+	\State $payment \gets find\_assoc(values, "pay")$
+	\Emit $(vendor, payment)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Joined Input}}
+\begin{algorithmic}[1]
+	\Function{map}{$key, value$}
+	\Emit $(key, value)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce to Find Maximum}}
+\begin{algorithmic}[1]
+	\Function{reduce}{$key, values$}
+	\Comment{key is vendor id, values is list of payment amounts}
+	\State $payment \gets 0$
+	\For{$pay$ \textbf{in} $values$}
+		\If{$pay > payment$}
+			\State $payment \gets pay$
+		\EndIf
+	\EndFor
+	\Emit $(key, payment)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \newpage
 
@@ -81,9 +177,79 @@
 \subsection{Μεθοδολογία}
 H άσκηση ζητάει χρησιμοποιώντας τα δεδομένα του πρώτου ερωτηματος να βρούμε τις κεντρικές συντεταγμένες των top 5 περιοχών επιβίβασης πελατών με την χρήση του αλγορίθμου $k-means$. Για την επίλυση, διαβάζουμε τα δεδομένα από το αρχείο yellow\_tripdata\_1m.csv. \\ \\
 Αρχικα, για κάθε εγγραφή του αρχείου yellow\_tripdata\_1m.csv κρατάμε τις συντεταγμένες, αρχικοποιούμε μεταβλητές και ορίζουμε τα κέντρα ως τις πρώτες 5 τιμές του αρχείου.\\ \\ 
-Σε κάθε επανάληψη, εφαρμόζουμε μία φάση \textbf{Map} για να δημιουργήσουμε ένα RDD με τις συντεταγμένες κάθε σημείου και ένα αντίγραφο των κέντρων. Έπειτα, εφαρμόζουμε μία φάση \textbf{Map} και κάνουμε emit tuples της μορφής $( key = closest\_cluster\_id, value = coordinates)$. Στη συνέχεια, εφαρμόζουμε μία φάση \textbf{MapReduceMap}, για την εύρεση των νέων κέντρων με βάση τους μέσους όρους ανά συντεταγμένη (η διαδικασία είναι παρόμοια με την εύρεση του μέσου όρου στην άσκηση 1 με τη διαφορά ότι εδώ βρίσκουμε μέσο όρο σε πολλά στοιχεία ανά στοιχείο). \\ \\ 
-Μετά το πέρας των $5$ επαναλήψεων τα έχουμε βρει τα τελικά κέντρα του αλγορίθμου $k-means$, τα γράφουμε σε αρχείο και τα εμφανίζουμε.  
+Σε κάθε επανάληψη, εφαρμόζουμε μία φάση \textbf{Map} για να δημιουργήσουμε ένα RDD με τις συντεταγμένες κάθε σημείου και ένα αντίγραφο των κέντρων. Έπειτα, εφαρμόζουμε μία φάση \textbf{Map} και κάνουμε emit tuples της μορφής \emph{(key = closest\_cluster\_id, value = coordinates)}. Στη συνέχεια, εφαρμόζουμε μία φάση \textbf{MapReduceMap}, για την εύρεση των νέων κέντρων με βάση τους μέσους όρους ανά συντεταγμένη (η διαδικασία είναι παρόμοια με την εύρεση του μέσου όρου στην άσκηση 1 με τη διαφορά ότι εδώ βρίσκουμε μέσο όρο σε πολλά στοιχεία ανά στοιχείο). \\ \\ 
+Μετά το πέρας των $5$ επαναλήψεων τα έχουμε βρει τα τελικά κέντρα του αλγορίθμου $k-means$, τα γράφουμε σε αρχείο και τα εμφανίζουμε.
+
 \subsection{Ψευδοκώδικας}
+
+Προετοιμασία αρχικού dataset:
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Input}}
+\begin{algorithmic}[1]
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is csv line}
+	\State $line \gets value.split(",")$
+	\State $lng \gets line[3]$
+	\State $lat \gets line[4]$
+	\Emit $(key, (lng, lat))$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce Mapped Input}}
+\begin{algorithmic}[1]
+	\Function{reduce}{$key, values$}
+	\Emit $(key, values)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\noindent
+Τώρα, θεωρώντας πως έχουμε υπολογίσει τα αρχικά κέντρα, θα υλοποιήσουμε τον κύριο αλγόριθμο:
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Population}}
+\begin{algorithmic}[1]
+	\Require{$centroids$}\Comment{centroids are tuples of id, tuple of lng, lat}
+	\Require{$euclidean$}\Comment{euclidean is a function}
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is tuple of lng, lat}
+	\State $id \gets -1$
+	\State $distance \gets INF$\Comment{infinite starting distance}
+	\For{$centroid$ \textbf{in} $centroids$}
+		\State $dist \gets euclidean(value, centroid[1])$
+		\If{$dist < distance$}
+			\State $id \gets centroid[0]$
+			\State $distance \gets dist$
+		\EndIf
+	\EndFor
+	\Emit $(id, value)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce Centroids to Find New Centre}}
+\begin{algorithmic}[1]
+	\Function{reduce}{$key, values$}
+	\Comment{key is centroid id, values are coordinates in this centroid}
+	\State $lngs \gets 0$
+	\State $lats \gets 0$
+	\For{$(lng, lat)$ \textbf{in} $values$}
+		\State $lngs \gets lngs + lng$
+		\State $lats \gets lats + lat$
+	\EndFor
+	\State $N \gets len(values)$
+	\State $lng \gets lngs / N$
+	\State $lat \gets lats / N$
+	\Emit $(key, (lng, lat))$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\noindent
+Από το τελευταίο \texttt{reduce} λαμβάνουμε τα νέα \texttt{centroids}, τα οποία θα ξαναχρησιμοποιήσουμε στην επόμενη επανάληψη, ενώ η διαδικασία της παραπάνω \texttt{MapReduce} επαναλαμβάνεται 3 φορές.
 
 \newpage
 
@@ -91,10 +257,74 @@ H άσκηση ζητάει χρησιμοποιώντας τα δεδομένα
 
 \subsection{Μεθοδολογία}
 H άσκηση ζητάει να βρούμε το $PageRank$ κάθε κόμβου που βρίσκεται στα δεδομένα της Google με βάση τον επαναληπτικό τύπο που δίνεται στην εκφώνηση. Για την επίλυση του ερωτήματος, διαβάζουμε τα δεδομένα από το αρχείο web-Google.txt.\\ \\
-Αρχικά, εφαρμόζουμε μία φάση \textbf{Map} και για να δημιουργήσουμε ένα RDD που περιέχει σε tuples τα from και to ids των nodes. Έπειτα, πραγματοποιούμε \textbf{groupByKey} προκειμένου να ομαδοποιήσουμε τα δεδομένα σε tuples της μορφής $( key = from\_id, value = list\_of\_to\_ids)$ και πραγματοποιούμε τις αρχικοποιήσεις παράγοντας tuples της μορφής $( key = id, value = score)$.\\ \\
-Σε κάθε επανάληψη, εφαρμόζουμε μία φάση \textbf{Join} για να δημιουργήσουμε tuples της μορφής $( key = from\_id, value = (list\_of\_to\_ids,score))$. Έπειτα, εφαρμόζουμε μία φάση \textbf{FlatMapReduceMap} έτσι ώστε να αποκτήσουμε - από τη φάση \textbf{FlatMap} - tuples της μορφής $( key = from\_id, value = a\_fraction\_of\_outbounds\_links)$ , δηλαδή tuples της μορφής $(id, \frac{PR(pj)}{L(pj)})$, στη συνέχεια - φάση \textbf{Reduce} - να υπολογίσουμε tuples της μορφής $( key = from\_id, value =\sum_{pj\in{M(pi)}}^{} \frac{PR(pj)}{L(pj)}) $ και τέλος στη φάση \textbf{Map} εφαρμόζουμε τον τύπο υπολογισμού $PageRank$ και λαμβάνουμε tuples της μορφής $( key = id, value = score)$.\\ \\
-Μετά το πέρας των $5$ επαναλήψεων τα έχουμε βρει τα $PageRank$ scores για κάθε $id$, τα ταξινομούμε ως προς $id$, τα γράφουμε σε αρχείο και τα εμφανίζουμε.  
+Αρχικά, εφαρμόζουμε μία φάση \textbf{Map} και για να δημιουργήσουμε ένα RDD που περιέχει σε tuples τα from και to ids των nodes. Έπειτα, πραγματοποιούμε \textbf{groupByKey} προκειμένου να ομαδοποιήσουμε τα δεδομένα σε tuples της μορφής \emph{(key = from\_id, value = list\_of\_to\_ids)} και πραγματοποιούμε τις αρχικοποιήσεις παράγοντας tuples της μορφής \emph{( key = id, value = score)}.\\ \\
+Σε κάθε επανάληψη, εφαρμόζουμε μία φάση \textbf{Join} για να δημιουργήσουμε tuples της μορφής \emph{(key = from\_id, value = (list\_of\_to\_ids,score))}. Στη συνέχεια, εφαρμόζουμε μία φάση \textbf{FlatMapReduceMap} έτσι ώστε να αποκτήσουμε - από τη φάση \textbf{FlatMap} - tuples της μορφής \emph{(key = from\_id, value = a\_fraction\_of\_outbounds\_links)} , δηλαδή tuples της μορφής $(id, \frac{PR(pj)}{L(pj)})$, στη συνέχεια - φάση \textbf{Reduce} - να υπολογίσουμε tuples της μορφής $( key = from\_id, value =\sum_{pj\in{M(pi)}}^{} \frac{PR(pj)}{L(pj)}) $ και τέλος στη φάση \textbf{Map} εφαρμόζουμε τον τύπο υπολογισμού $PageRank$ και λαμβάνουμε tuples της μορφής \emph{(key = id, value = score)}.\\ \\
+Μετά το πέρας των $5$ επαναλήψεων τα έχουμε βρει τα $PageRank$ scores για κάθε $id$, τα ταξινομούμε ως προς $id$, τα γράφουμε σε αρχείο και τα εμφανίζουμε.
+
 \subsection{Ψευδοκώδικας}
+
+Προετοιμασία αρχικού dataset:
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Input}}
+\begin{algorithmic}[1]
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is csv line}
+	\State $line \gets value.split(",")$
+	\State $in \gets line[0]$
+	\State $out \gets line[1]$
+	\Emit $(in, out)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce Mapped Input}}
+\begin{algorithmic}[1]
+	\Require{$scores$}\Comment{scores for each of the nodes, as dictionary, initialised at 0.5 for each node}
+	\Function{reduce}{$key, values$}
+	\Comment{key is from id, values is list of to ids}
+	\Emit $(key, (values, scores[key]))$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\noindent
+Τώρα θα εφαρμόσουμε το κύριο κομμάτι του κώδικα:
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Scores}}
+\begin{algorithmic}[1]
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is tuple of list, score}
+	\State $ids \gets value[0]$
+	\State $score \gets value[1]$
+	\State $N \gets len(ids)$
+	\For{$id$ \textbf{in} $ids$}
+		\State $s \gets score / N$
+		\Emit $(id, s)$
+	\EndFor
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce Scores}}
+\begin{algorithmic}[1]
+	\Require{$N$}\Comment{Number of Nodes}
+	\Require{$d$}\Comment{float in [0, 1]}
+	\Function{reduce}{$key, values$}
+	\Comment{key is id, values is list of scores}
+	\State $sum \gets 0$
+	\For{$score$ \textbf{in} $values$}
+		\State $sum \gets sum + score$
+	\EndFor
+	\State $score \gets ((1 - d) / N) + (d * score)$
+	\Emit $(key, score)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\noindent
+Η παραπάνω διαδιακασία πρέπει να επαναληφθεί 5 φορές, στις οποίες προϋποθέτουμε ότι το τελικό αποτέλεσμα της \texttt{reduce scores} είναι αυτό που χρησιμοποιείται στην αρχική \texttt{reduce}.
 
 \newpage
 
@@ -102,21 +332,95 @@ H άσκηση ζητάει να βρούμε το $PageRank$ κάθε κόμβ�
 
 \subsection{Μεθοδολογία}
 H άσκηση ζητάει να υπολογιστεί το γινόμενο δύο πινάκων. Για την επίλυση, διαβάζουμε τα δεδομένα από τα αρχεία Α.csv και B.csv και χρησιμοποιούμε μία φάση \textbf{MapReduceMap}, έπειτα μία φάση \textbf{CartesianProduct} και τέλος μία φάση \textbf{MapMap}  \\ \\
-Στη φάση \textbf{Map}, για κάθε εγγραφή του αρχείου A.csv κάνουμε emit tuples της μορφής $( key = row\_id\_of\_A, value =(col\_id\_of\_A,value)$. Επιπλέον, για κάθε εγγραφή του αρχείου Β.csv κάνουμε emit tuples της μορφής $( key = col\_id\_of\_B, value =(row\_id\_of\_B,value)$.  \\ \\
-Στη φάση \textbf{Reduce}, για κάθε tuple της πρώτης φάσης αθροίζουμε τα values (ως λίστες) και κάνουμε emit tuples της μορφής $( key = row\_id, value =[(col\_id,value)]$ για την πρώτη περίπτωση και για τη δεύτερη περίπτωση $( key = col\_id, value =[(row\_id,value)]$. \\ \\
-Στη φάση \textbf{Map}, για κάθε tuple της πιο πάνω φάσης κάνουμε ταξινόμηση τα values με βάση το $ col\_id$ και κάνουμε emit tuples της μορφής $( key = row\_id, value=[value])$ για την πρώτη περίπτωση, ενώ για τη δεύτερη περίπτωση κάνουμε ταξινόμηση τα values με βάση το $ row\_id$ και κάνουμε emit tuples της μορφής $( key = col\_id, value=[value])$.  \\ \\
-Στη φάση \textbf{CartesianProduct}, δημιουργούμε tuples της μορφής $( key = (row\_id\_of\_A,col\_id\_of\_B), value = ([value\_A],[value\_B])$. \\ \\
-Τέλος, στη φάση \textbf{MapMap}, υπολογίζουμε την τιμή του στοιχείου της θέσης $ (row\_id\_of\_A,col\_id\_of\_B) $ του τελικού πίνακα, δηλαδή κάνουμε emit tuples της μορφής $( key = (row\_id\_of\_A,col\_id\_of\_B), value = final_value)$. \\ \\
-Μετά το πέρας της μεθόδου τα έχουμε βρει τις τιμές του τελικού πίνακα, τα γράφουμε σε αρχείο και τα ταξινομούμε ως προς $(row\_id\_of\_A,col\_id\_of\_B)$.  
+Στη φάση \textbf{Map}, για κάθε εγγραφή του αρχείου A.csv κάνουμε emit tuples της μορφής \emph{(key = row\_id\_of\_A, value =(col\_id\_of\_A,value)}. Επιπλέον, για κάθε εγγραφή του αρχείου Β.csv κάνουμε emit tuples της μορφής \emph{(key = col\_id\_of\_B, value =(row\_id\_of\_B,value)}.\\ \\
+Στη φάση \textbf{Reduce}, για κάθε tuple της πρώτης φάσης αθροίζουμε τα values (ως λίστες) και κάνουμε emit tuples της μορφής \emph{(key = row\_id, value =[(col\_id,value)]} για την πρώτη περίπτωση και για τη δεύτερη περίπτωση \emph{(key = col\_id, value =[(row\_id,value)]}. \\ \\
+Στη φάση \textbf{Map}, για κάθε tuple της πιο πάνω φάσης κάνουμε ταξινόμηση τα values με βάση το $ col\_id$ και κάνουμε emit tuples της μορφής \emph{(key = row\_id, value=[value])} για την πρώτη περίπτωση, ενώ για τη δεύτερη περίπτωση κάνουμε ταξινόμηση τα values με βάση το $ row\_id$ και κάνουμε emit tuples της μορφής \emph{(key = col\_id, value=[value])}.\\ \\
+Στη φάση \textbf{CartesianProduct}, δημιουργούμε tuples της μορφής \emph{(key = (row\_id\_of\_A, col\_id\_of\_B), value = ([value\_A], [value\_B])}.\\ \\
+Τέλος, στη φάση \textbf{MapMap}, υπολογίζουμε την τιμή του στοιχείου της θέσης \emph{(row\_id\_of\_A, col\_id\_of\_B)} του τελικού πίνακα, δηλαδή κάνουμε emit tuples της μορφής \emph{(key = (row\_id\_of\_A, col\_id\_of\_B), value = final\_value)}. \\ \\
+Μετά το πέρας της μεθόδου τα έχουμε βρει τις τιμές του τελικού πίνακα, τα γράφουμε σε αρχείο και τα ταξινομούμε ως προς $(row\_id\_of\_A,col\_id\_of\_B)$.
+  
 \subsection{Ψευδοκώδικας}
 
+Στον ψευδοκώδικα, θα υλοποιήσουμε κάπως διαφορετικά το καρτεσιανό γινόμενο (μέθοδος \texttt{cartesian} του \texttt{spark}).
 
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Array A}}
+\begin{algorithmic}[1]
+	\Require{M}\Comment{number of columns}
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is csv line}
+	\State $line \gets value.split(",")$
+	\State $row \gets line[0]$
+	\State $col \gets line[1]$
+	\State $value \gets line[2]$
+	\For{$i \gets 0, M$}
+		\Emit $((row, i), ("A", col, value))$
+	\EndFor
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Map Array B}}
+\begin{algorithmic}[1]
+	\Require{N}\Comment{number of rows}
+	\Function{map}{$key, value$}
+	\Comment{key is some id, value is csv line}
+	\State $line \gets value.split(",")$
+	\State $row \gets line[0]$
+	\State $col \gets line[1]$
+	\State $value \gets line[2]$
+	\For{$i \gets 0, N$}
+	\Emit $((i, col), ("B", row, value))$
+	\EndFor
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption*{\bfseries{Reduce Arrays and Multiply}}
+\begin{algorithmic}[1]
+	\Function{reduce}{$key, values$}
+	\Comment{key is (row, col), values is list of elements from A and B}
+	\State $A = [\ ]$
+	\State $B = [\ ]$
+	\For{$element$ \textbf{in} $values$}
+		\If{$element[0]$ \textbf{is} $"A"$}
+			\State $A.append((element[1], element[2]))$
+		\Else
+			\State $B.append((element[1], element[2]))$
+		\EndIf
+	\EndFor
+	\State $A.sort(key=lambda\ x:\ x[0])$
+	\State $B.sort(key=lambda\ x:\ x[0])$
+	\State $sum \gets 0$
+	\For{$i \gets 0, len(A)$}
+		\State $sum \gets sum + A[i] * B[i]$
+	\EndFor
+	\Emit $(key, sum)$
+	\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\newpage
 
 \section{Παρατηρήσεις - Επισημάνσεις}
 
 \subsection{Jupyter Notebook}
 Για την ευκολότερη και καλύτερη οργάνωση του κώδικά μας εγκαταστήσαμε Jupyter Notebook.
+
 \subsection{Github}
-Παρακάτω δίνεται σχετικό link στο Github για τον κώδικα που χρησιμοποιήθηκε 
+Παρακάτω δίνεται σχετικό link στο Github για τον κώδικα που χρησιμοποιήθηκε:
+\begin{center}
+\url{https://github.com/xspirus/AdvancedDatabases}
+\end{center}
+\noindent
+Το link θα είναι δημόσιο μετά το πέρας της προθεσμίας.
+
+\subsection{HDFS}
+Το link για το \texttt{HDFS} στο οποίο βρίσκονται τα δεδομένα μας είναι:
+\begin{center}
+\url{http://83.212.73.250:50070}
+\end{center}
 
 \end{document}
